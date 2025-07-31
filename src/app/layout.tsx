@@ -8,8 +8,8 @@ const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 export const metadata: Metadata = {
-  title: "Ikigaivilla - Điểm đến nghỉ dưỡng sang trọng",
-  description: "Ikigaivilla - Điểm đến nghỉ dưỡng sang trọng",
+  title: "IKIGAIVILLA - TRUNG TÂM PHỨC HỢP NGHỈ DƯỠNG IKIGAI VIỆT NAM",
+  description: "IKIGAIVILLA - TRUNG TÂM PHỨC HỢP NGHỈ DƯỠNG IKIGAI VIỆT NAM",
 };
 
 export default function RootLayout({

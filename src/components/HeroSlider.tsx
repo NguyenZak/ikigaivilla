@@ -143,7 +143,7 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
 
             {/* Content - Positioned at bottom left */}
             <div className="relative z-10 h-full flex items-end">
-              <div className="max-w-[1440px] mx-auto px-4 md:px-8 w-full pb-4 md:pb-16">
+              <div className="max-w-[1440px] mx-auto px-4 md:px-8 w-full pb-16 md:pb-16">
                 <div className="max-w-2xl">
                   {/* Main Heading */}
                   <h1 className="text-2xl sm:text-xl md:text-xl lg:text-5xl font-bold mb-3 md:mb-6 leading-tight text-white">
