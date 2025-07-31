@@ -105,7 +105,7 @@ export default function OurTeam() {
   };
 
   return (
-    <section ref={sectionRef} className="py-20 bg-white">
+    <section ref={sectionRef} className="py-20 bg-[#f8f7f2]">
       <div className="max-w-[1440px] mx-auto px-4">
         <div className={`text-center mb-10 transition-all duration-1000 ease-out transform ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'

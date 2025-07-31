@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="max-w-[1440px] mx-auto px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Left Column - Social Media & Legal Links */}
-          <div className="space-y-6">
+          <div className="space-y-6 order-2 md:order-1">
             {/* Social Media Icons */}
             <div className="flex space-x-4">
               <a href="#" className="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center hover:bg-[#d11e0f] transition-colors">
@@ -38,7 +38,7 @@ export default function Footer() {
           </div>
 
           {/* Middle Column - Navigation Links */}
-          <div className="space-y-2">
+          <div className="space-y-2 order-3 md:order-2">
             <Link href="/" className="block text-gray-600 hover:text-[#d11e0f] transition-colors">
               Trang chủ
             </Link>
@@ -54,7 +54,7 @@ export default function Footer() {
           </div>
 
           {/* Right Column - Brand & Description */}
-          <div className="space-y-4">
+          <div className="space-y-4 order-1 md:order-3">
             <h3 className="text-2xl font-bold text-black">
             <Link href="/">
             <Image src="/logo.svg" alt="Logo" width={300} height={200} />

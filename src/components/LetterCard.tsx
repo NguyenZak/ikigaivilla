@@ -33,7 +33,7 @@ export default function LetterCard() {
 
   return (
     <section className="py-16 bg-white" ref={cardRef}>
-      <div className="max-w-[1440px] mx-auto px-8">
+      <div className="max-w-[1440px] mx-auto px-4">
         <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-100">
           <div className="grid md:grid-cols-3 gap-12">
             {/* Logo Column - 1/3 */}

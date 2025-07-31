@@ -12,7 +12,12 @@ export default function Home() {
       alt: "Ikigaivilla Onsen",
       title: "Chào mừng đến với Ikigaivilla",
       subtitle: "Trải nghiệm nghỉ dưỡng sang trọng với dịch vụ đẳng cấp 5 sao",
-      overlay: "from-black/50 to-black/50"
+      overlay: "from-black/50 to-black/50",
+      statistics: [
+        { value: "50+", label: "Phòng Nghỉ" },
+        { value: "1000+", label: "Khách Hài Lòng" },
+        { value: "5★", label: "Đánh Giá Trung Bình" }
+      ]
     },
     {
       type: "image" as const,
@@ -20,7 +25,12 @@ export default function Home() {
       alt: "Ikigaivilla Thư Viện",
       title: "Không gian thư viện yên tĩnh",
       subtitle: "Nơi lý tưởng để thư giãn và làm việc",
-      overlay: "from-black/50 to-black/50"
+      overlay: "from-black/50 to-black/50",
+      statistics: [
+        { value: "24/7", label: "Hỗ Trợ Khách Hàng" },
+        { value: "100%", label: "An Toàn Tuyệt Đối" },
+        { value: "4.9★", label: "Đánh Giá Dịch Vụ" }
+      ]
     },
     {
       type: "image" as const,
@@ -28,7 +38,12 @@ export default function Home() {
       alt: "Ikigaivilla Cổng Chính",
       title: "Cổng chính Ikigaivilla",
       subtitle: "Kiến trúc độc đáo, ấn tượng ngay từ cái nhìn đầu tiên",
-      overlay: "from-black/50 to-black/50"
+      overlay: "from-black/50 to-black/50",
+      statistics: [
+        { value: "2020", label: "Năm Thành Lập" },
+        { value: "100+", label: "Nhân Viên Chuyên Nghiệp" },
+        { value: "99%", label: "Khách Hàng Quay Lại" }
+      ]
     },
     {
       type: "image" as const,
@@ -36,7 +51,12 @@ export default function Home() {
       alt: "Ikigaivilla Cổng Phụ",
       title: "Cổng phụ tiện lợi",
       subtitle: "Thuận tiện di chuyển, an toàn tuyệt đối",
-      overlay: "from-black/50 to-black/50"
+      overlay: "from-black/50 to-black/50",
+      statistics: [
+        { value: "3", label: "Cổng Ra Vào" },
+        { value: "24h", label: "Bảo Vệ" },
+        { value: "100%", label: "An Toàn" }
+      ]
     },
     {
       type: "image" as const,
@@ -44,38 +64,19 @@ export default function Home() {
       alt: "Ikigaivilla PCTT",
       title: "Phòng chức năng đa dạng",
       subtitle: "Đáp ứng mọi nhu cầu của khách hàng",
-      overlay: "from-black/50 to-black/50"
+      overlay: "from-black/50 to-black/50",
+      statistics: [
+        { value: "10+", label: "Loại Phòng Chức Năng" },
+        { value: "200+", label: "Tiện Ích Đặc Biệt" },
+        { value: "4.8★", label: "Đánh Giá Tiện Ích" }
+      ]
     }
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8f7f2]">
+    <div className="min-h-screen  bg-[#f8f7f2]">
       {/* Hero Banner Slider */}
       <HeroSlider slides={slides} />
-
-      {/* Quick Stats */}
-      <section className="py-16 bg-white">
-        <div className="max-w-[1440px] mx-auto px-8">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-[#d11e0f] mb-2">50+</div>
-              <div className="text-gray-600">Phòng Nghỉ</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-[#d11e0f] mb-2">1000+</div>
-              <div className="text-gray-600">Khách Hài Lòng</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-[#d11e0f] mb-2">5★</div>
-              <div className="text-gray-600">Đánh Giá Trung Bình</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-[#d11e0f] mb-2">24/7</div>
-              <div className="text-gray-600">Hỗ Trợ Khách Hàng</div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Thư ngỏ Section */}
       <LetterCard />

@@ -10,6 +10,10 @@ interface Slide {
   title: string;
   subtitle: string;
   overlay: string;
+  statistics: {
+    value: string;
+    label: string;
+  }[];
 }
 
 interface HeroSliderProps {
@@ -137,32 +141,49 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
             {/* Overlay */}
             <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlay}`}></div>
 
-            {/* Content */}
-            <div className="relative z-10 h-full flex items-center justify-center">
-              <div className="max-w-[1440px] mx-auto px-8 text-center text-white">
-                <div className="mb-8">
-                  <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+            {/* Content - Positioned at bottom left */}
+            <div className="relative z-10 h-full flex items-end">
+              <div className="max-w-[1440px] mx-auto px-4 md:px-8 w-full pb-4 md:pb-16">
+                <div className="max-w-2xl">
+                  {/* Main Heading */}
+                  <h1 className="text-2xl sm:text-xl md:text-xl lg:text-5xl font-bold mb-3 md:mb-6 leading-tight text-white">
                     {slide.title}
                   </h1>
-                  <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
+                  
+                  {/* Descriptive Paragraph */}
+                  <p className="text-sm sm:text-base md:text-xl lg:text-xl mb-4 md:mb-8 text-gray-200 leading-relaxed">
                     {slide.subtitle}
                   </p>
-                </div>
 
-                {/* Call to Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                  <Link
-                    href="/rooms"
-                    className="bg-[#d11e0f] hover:bg-[#b01a0d] text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-                  >
-                    Khám Phá Phòng
-                  </Link>
-                  <Link
-                    href="/pricing"
-                    className="bg-transparent border-2 border-white hover:bg-white hover:text-gray-800 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105"
-                  >
-                    Xem Bảng Giá
-                  </Link>
+                  {/* Call to Action Buttons */}
+                  <div className="flex flex-row gap-2 md:gap-4 mb-6 md:mb-12">
+                    <Link
+                      href="/services"
+                      className="bg-gradient-to-r from-[#d11e0f] to-[#b01a0d] hover:from-[#b01a0d] hover:to-[#8f150a] text-white px-3 md:px-8 py-2 md:py-4 rounded-lg font-semibold text-xs md:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex-1"
+                    >
+                      Đặt lịch tư vấn
+                    </Link>
+                    <Link
+                      href="/about"
+                      className="bg-transparent border-2 border-white hover:bg-white hover:text-gray-800 text-white px-3 md:px-8 py-2 md:py-4 rounded-lg font-semibold text-xs md:text-lg transition-all duration-300 transform hover:scale-105 flex-1"
+                    >
+                      Tìm hiểu thêm
+                    </Link>
+                  </div>
+
+                  {/* Statistics Section */}
+                  <div className="flex flex-row gap-2 md:gap-8">
+                    {(slide.statistics || []).map((stat, statIndex) => (
+                      <div key={statIndex} className="text-center flex-1">
+                        <div className="text-lg md:text-4xl font-bold mb-1 md:mb-2 text-white">
+                          {stat.value}
+                        </div>
+                        <div className="text-xs md:text-sm text-gray-300">
+                          {stat.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
