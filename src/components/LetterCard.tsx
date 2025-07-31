@@ -67,7 +67,7 @@ export default function LetterCard() {
                 <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center md:text-left font-svn-manchester">
                   Thư ngỏ
                 </h2>
-                <div className="text-gray-700 leading-relaxed space-y-4 font-excalifont">
+                <div className="text-gray-700 leading-relaxed space-y-4">
                   <p className={`transition-all duration-800 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: '0.4s' }}>
                     Kính gửi Quý Ông/Bà, Quý Gia đình và Quý Đối tác,
                   </p>
