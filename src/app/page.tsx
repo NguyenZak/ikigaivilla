@@ -3,6 +3,7 @@ import HeroSlider from "../components/HeroSlider";
 import LetterCard from "../components/LetterCard";
 import WhyChooseUs from "../components/WhyChooseUs";
 import OurTeam from "../components/OurTeam";
+import NewsSlider from "../components/NewsSlider";
 
 export default function Home() {
   const slides = [
@@ -86,6 +87,9 @@ export default function Home() {
 
       {/* Our Team */}
       <OurTeam />
+
+      {/* News Slider */}
+      <NewsSlider />
 
       
     </div>

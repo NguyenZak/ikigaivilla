@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface NewsItem {
   id: number;
@@ -16,6 +17,7 @@ interface NewsItem {
 }
 
 export default function News() {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("Tất cả");
@@ -188,7 +190,10 @@ export default function News() {
                   </p>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Bởi {news.author}</span>
-                    <button className="text-[#d11e0f] font-semibold hover:underline">
+                    <button 
+                      onClick={() => router.push(`/news/${news.id}`)}
+                      className="text-[#d11e0f] font-semibold hover:underline"
+                    >
                       Đọc thêm
                     </button>
                   </div>

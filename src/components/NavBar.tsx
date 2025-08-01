@@ -48,7 +48,7 @@ export default function NavBar() {
           <Link href="/services" className="text-gray-700 hover:text-[#d11e0f] font-semibold py-2">Tiện ích đặc quyền</Link>
           <Link href="/rooms" className="text-gray-700 hover:text-[#d11e0f] font-semibold py-2">Các hạng phòng</Link>
           <Link href="/pricing" className="text-gray-700 hover:text-[#d11e0f] font-semibold py-2">Bảng giá</Link>
-          <Link href="/news" className="text-gray-700 hover:text-[#d11e0f] font-semibold py-2">Tin Tức</Link>
+          <Link href="/news" className="text-gray-700 hover:text-[#d11e0f] font-semibold py-2">Tin tức</Link>
           <Link href="/contact" className="text-gray-700 hover:text-[#d11e0f] font-semibold py-2">Liên hệ</Link>
         </div>
       </div>
