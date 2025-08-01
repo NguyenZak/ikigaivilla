@@ -48,3 +48,33 @@ body {
 .font-excalifont {
   font-family: 'Excalifont', serif;
 }
+
+/* Custom Swiper Styles */
+.swiper-button-next,
+.swiper-button-prev {
+  display: none !important;
+}
+
+.swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+  opacity: 1 !important;
+  transition: all 0.3s ease !important;
+}
+
+.swiper-pagination-bullet:hover {
+  background: rgba(255, 255, 255, 0.75) !important;
+  transform: scale(1.25) !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: white !important;
+  transform: scale(1.25) !important;
+}
+
+/* Hide default Swiper navigation arrows */
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  display: none !important;
+}

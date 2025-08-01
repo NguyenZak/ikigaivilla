@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import LetterCard from "./LetterCard";
+import CTASection from "./CTASection";
 
 interface TeamMember {
   name: string;
@@ -296,30 +297,13 @@ export default function AboutUs() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-gray-900 to-gray-800">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Sẵn Sàng Trải Nghiệm?
-          </h2>
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
-            Hãy để chúng tôi giúp bạn tạo nên những khoảnh khắc đáng nhớ tại Ikigai Villa
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/contact"
-              className="bg-gradient-to-r from-[#d11e0f] to-[#b01a0d] hover:from-[#b01a0d] hover:to-[#8f150a] text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-            >
-              Liên hệ ngay
-            </Link>
-            <Link
-              href="/services"
-              className="border-2 border-white text-white hover:bg-white hover:text-gray-800 px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300"
-            >
-              Xem dịch vụ
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CTASection 
+        title="Sẵn Sàng Trải Nghiệm?"
+        description="Hãy để chúng tôi giúp bạn tạo nên những khoảnh khắc đáng nhớ tại Ikigai Villa"
+        primaryButtonText="Liên hệ ngay"
+        secondaryButtonText="Xem dịch vụ"
+        secondaryButtonLink="/services"
+      />
     </div>
   );
 } 
