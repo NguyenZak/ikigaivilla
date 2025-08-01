@@ -55,7 +55,7 @@ export default function PricingPage() {
               </span>
             </div>
             <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">Ikigai Nội Trú</h3>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">Ikigai Nội Trú Cao Cấp</h3>
             </div>
             <ul className="space-y-3 mb-8 flex-1">
               <li className="flex items-center">
