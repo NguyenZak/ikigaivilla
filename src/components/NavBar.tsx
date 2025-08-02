@@ -1,14 +1,47 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const pathname = usePathname();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isMenuOpen &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        closeMenu();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);
+
+  // Close menu when route changes
+  useEffect(() => {
+    closeMenu();
+  }, [pathname]);
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-white shadow-lg py-4 px-8">
@@ -31,6 +64,7 @@ export default function NavBar() {
 
         {/* Mobile Menu Button */}
         <button
+          ref={buttonRef}
           onClick={toggleMenu}
           className="md:hidden flex flex-col space-y-1 p-2"
           aria-label="Toggle menu"
@@ -42,7 +76,10 @@ export default function NavBar() {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'} mt-4 pb-4`}>
+      <div 
+        ref={menuRef}
+        className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'} mt-4 pb-4`}
+      >
         <div className="flex flex-col space-y-4 px-8">
           <Link href="/about" className="text-gray-700 hover:text-[#d11e0f] font-semibold py-2">Về chúng tôi</Link>
           <Link href="/services" className="text-gray-700 hover:text-[#d11e0f] font-semibold py-2">Tiện ích đặc quyền</Link>

@@ -18,9 +18,19 @@ export default function ServicesSlider() {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(0);
 
   useEffect(() => {
     setIsVisible(true);
+    
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    
+    setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const servicesData: ServiceItem[] = [
@@ -83,20 +93,25 @@ export default function ServicesSlider() {
   ];
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex + 4 >= servicesData.length ? 0 : prevIndex + 1
-    );
+    setCurrentIndex((prevIndex) => {
+      const cardsToShow = windowWidth < 768 ? 1 : windowWidth < 1024 ? 2 : 4;
+      return prevIndex + 1 >= servicesData.length ? 0 : prevIndex + 1;
+    });
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? Math.max(0, servicesData.length - 4) : prevIndex - 1
-    );
+    setCurrentIndex((prevIndex) => {
+      const cardsToShow = windowWidth < 768 ? 1 : windowWidth < 1024 ? 2 : 4;
+      return prevIndex === 0 ? Math.max(0, servicesData.length - cardsToShow) : prevIndex - 1;
+    });
   };
 
   const getVisibleServices = () => {
     const visibleServices = [];
-    for (let i = 0; i < 4; i++) {
+    // On mobile, show 1 card, on tablet show 2, on desktop show 4
+    const cardsToShow = windowWidth < 768 ? 1 : windowWidth < 1024 ? 2 : 4;
+    
+    for (let i = 0; i < cardsToShow; i++) {
       const index = (currentIndex + i) % servicesData.length;
       visibleServices.push(servicesData[index]);
     }
@@ -121,20 +136,21 @@ export default function ServicesSlider() {
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-[#d11e0f] hover:text-white text-[#d11e0f] p-3 rounded-full shadow transition-all duration-300 hover:scale-110 touch-manipulation z-30"
+            aria-label="Previous"
           >
-            <ChevronLeftIcon className="w-6 h-6 text-gray-700" />
+            <ChevronLeftIcon className="w-6 h-6" />
           </button>
-
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-[#d11e0f] hover:text-white text-[#d11e0f] p-3 rounded-full shadow transition-all duration-300 hover:scale-110 touch-manipulation z-30"
+            aria-label="Next"
           >
-            <ChevronRightIcon className="w-6 h-6 text-gray-700" />
+            <ChevronRightIcon className="w-6 h-6" />
           </button>
 
           {/* Services Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:px-8">
             {getVisibleServices().map((service, index) => (
               <article 
                 key={service.id} 

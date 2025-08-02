@@ -18,9 +18,19 @@ export default function NewsSlider() {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(0);
 
   useEffect(() => {
     setIsVisible(true);
+    
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    
+    setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const newsData: NewsItem[] = [
@@ -94,7 +104,10 @@ export default function NewsSlider() {
 
   const getVisibleNews = () => {
     const visibleNews = [];
-    for (let i = 0; i < 4; i++) {
+    // On mobile, show 1 card, on tablet show 2, on desktop show 4
+    const cardsToShow = windowWidth < 768 ? 1 : windowWidth < 1024 ? 2 : 4;
+    
+    for (let i = 0; i < cardsToShow; i++) {
       const index = (currentIndex + i) % newsData.length;
       visibleNews.push(newsData[index]);
     }
@@ -119,20 +132,21 @@ export default function NewsSlider() {
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-[#d11e0f] hover:text-white text-[#d11e0f] p-3 rounded-full shadow transition-all duration-300 hover:scale-110 touch-manipulation z-30"
+            aria-label="Previous"
           >
-            <ChevronLeftIcon className="w-6 h-6 text-gray-700" />
+            <ChevronLeftIcon className="w-6 h-6" />
           </button>
-
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-[#d11e0f] hover:text-white text-[#d11e0f] p-3 rounded-full shadow transition-all duration-300 hover:scale-110 touch-manipulation z-30"
+            aria-label="Next"
           >
-            <ChevronRightIcon className="w-6 h-6 text-gray-700" />
+            <ChevronRightIcon className="w-6 h-6" />
           </button>
 
           {/* News Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:px-8">
             {getVisibleNews().map((news, index) => (
               <article 
                 key={news.id} 

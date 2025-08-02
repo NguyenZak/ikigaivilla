@@ -85,20 +85,17 @@ export default function AboutUs() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#f8f7f2] to-white">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
+      <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/banner/CONG PHU 4_4.png"
-            alt="Ikigai Villa Background"
+            src="/banner/ONSEN 10_4.png"
+            alt="About Us Background"
             fill
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 bg-black/50"></div>
         </div>
-
-        {/* Content */}
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
           <h1 className={`text-4xl md:text-6xl lg:text-7xl font-bold mb-6 transition-all duration-1000 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
@@ -110,26 +107,25 @@ export default function AboutUs() {
           }`}>
             Kiến tạo không gian sống đẳng cấp, nơi mỗi khoảnh khắc đều là trải nghiệm tuyệt vời
           </p>
-          <div className={`transition-all duration-1000 delay-500 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}>
-            <Link
-              href="/contact"
-              className="bg-gradient-to-r from-[#d11e0f] to-[#b01a0d] hover:from-[#b01a0d] hover:to-[#8f150a] text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-block"
-            >
-              Liên hệ ngay
-            </Link>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
-          </div>
         </div>
       </section>
-          <LetterCard />
+
+      {/* Brief Introduction */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+            Ikigai Villa - Nơi Hội Tụ Của Sự Hoàn Hảo
+          </h2>
+          <p className="text-lg text-gray-600 leading-relaxed max-w-3xl mx-auto">
+            Được thành lập với tầm nhìn kiến tạo những không gian sống đẳng cấp, Ikigai Villa 
+            không chỉ là nơi nghỉ dưỡng mà còn là điểm đến của những trải nghiệm tuyệt vời, 
+            nơi mỗi chi tiết đều được chăm chút tỉ mỉ để mang đến sự hài lòng tuyệt đối cho khách hàng.
+          </p>
+        </div>
+      </section>
+
+      <LetterCard />
+      
       {/* Company Story Section */}
       <section className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
