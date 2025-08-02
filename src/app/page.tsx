@@ -4,6 +4,9 @@ import LetterCard from "../components/LetterCard";
 import WhyChooseUs from "../components/WhyChooseUs";
 import OurTeam from "../components/OurTeam";
 import NewsSlider from "../components/NewsSlider";
+import RoomsSlider from "../components/RoomsSlider";
+import ServicesSlider from "../components/ServicesSlider";
+import Link from "next/link";
 
 export default function Home() {
   const slides = [
@@ -85,11 +88,17 @@ export default function Home() {
       {/* Why Choose Us */}
       <WhyChooseUs />
 
+      {/* Services Slider */}
+      <ServicesSlider />
+
       {/* Our Team */}
       <OurTeam />
 
       {/* News Slider */}
       <NewsSlider />
+
+      {/* Rooms Slider */}
+      <RoomsSlider />
 
       
     </div>
