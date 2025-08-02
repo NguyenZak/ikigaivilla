@@ -1,6 +1,21 @@
 "use client";
 import { useState, useEffect } from "react";
 
+interface Province {
+  province_code: string;
+  name: string;
+  short_name: string;
+  code: string;
+  place_type: string;
+  wards: Ward[];
+}
+
+interface Ward {
+  ward_code: string;
+  name: string;
+  province_code: string;
+}
+
 interface ContactModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -10,7 +25,12 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
+    province: "",
+    ward: "",
   });
+  const [provinces, setProvinces] = useState<Province[]>([]);
+  const [selectedWards, setSelectedWards] = useState<Ward[]>([]);
+  const [isLoadingProvinces, setIsLoadingProvinces] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [phoneError, setPhoneError] = useState("");
   const [isVisible, setIsVisible] = useState(false);
@@ -57,15 +77,44 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     }, 2000);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Load provinces data
+  useEffect(() => {
+    const loadProvinces = async () => {
+      setIsLoadingProvinces(true);
+      try {
+        const response = await fetch('/data/data.json');
+        const data = await response.json();
+        setProvinces(data);
+      } catch (error) {
+        console.error('Error loading provinces:', error);
+      } finally {
+        setIsLoadingProvinces(false);
+      }
+    };
+
+    if (isOpen) {
+      loadProvinces();
+    }
+  }, [isOpen]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
     
     // Clear phone error when user starts typing
-    if (e.target.name === 'phone') {
+    if (name === 'phone') {
       setPhoneError("");
+    }
+
+    // Update wards when province changes
+    if (name === 'province') {
+      const selectedProvince = provinces.find(p => p.province_code === value);
+      setSelectedWards(selectedProvince?.wards || []);
+      setFormData(prev => ({ ...prev, ward: "" }));
     }
   };
 
@@ -159,6 +208,63 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             />
             {phoneError && (
               <p className="text-red-500 text-sm mt-1">{phoneError}</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="province" className="block text-sm font-medium text-gray-700 mb-1">
+              Tỉnh/Thành phố *
+            </label>
+            <select
+              id="province"
+              name="province"
+              value={formData.province}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#d11e0f] focus:border-transparent bg-white"
+            >
+              <option value="">Chọn tỉnh/thành phố</option>
+              {isLoadingProvinces ? (
+                <option value="" disabled>Đang tải...</option>
+              ) : (
+                provinces.map((province) => (
+                  <option key={province.province_code} value={province.province_code}>
+                    {province.name}
+                  </option>
+                ))
+              )}
+            </select>
+            {provinces.length > 0 && !isLoadingProvinces && (
+              <p className="text-xs text-gray-500 mt-1">{provinces.length} tỉnh/thành phố</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="ward" className="block text-sm font-medium text-gray-700 mb-1">
+              Xã/Phường *
+            </label>
+            <select
+              id="ward"
+              name="ward"
+              value={formData.ward}
+              onChange={handleChange}
+              required
+              disabled={!formData.province}
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#d11e0f] focus:border-transparent ${
+                !formData.province ? 'bg-gray-100 cursor-not-allowed' : 'bg-white border-gray-300'
+              }`}
+            >
+              <option value="">
+                {!formData.province ? 'Vui lòng chọn tỉnh/thành phố trước' : 'Chọn xã/phường'}
+              </option>
+              {selectedWards.map((ward) => (
+                <option key={ward.ward_code} value={ward.ward_code}>
+                  {ward.name}
+                </option>
+              ))}
+            </select>
+            {formData.province && selectedWards.length > 0 && (
+              <p className="text-xs text-gray-500 mt-1">Có {selectedWards.length} xã/phường</p>
             )}
           </div>
 
