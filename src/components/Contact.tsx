@@ -1,12 +1,29 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faMapMarkerAlt, faPhone, faEnvelope, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faFacebook, faInstagram, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
+
 
 interface ContactInfo {
-  icon: string;
+  icon: IconProp;
   title: string;
   value: string;
   link?: string;
+}
+
+interface Province {
+  province_code: string;
+  name: string;
+  wards: Ward[];
+}
+
+interface Ward {
+  ward_code: string;
+  name: string;
+  province_code: string;
 }
 
 export default function Contact() {
@@ -15,36 +32,59 @@ export default function Contact() {
     name: "",
     email: "",
     phone: "",
+    province: "",
+    ward: "",
     subject: "",
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [provinces, setProvinces] = useState<Province[]>([]);
+  const [selectedWards, setSelectedWards] = useState<Ward[]>([]);
+  const [isLoadingProvinces, setIsLoadingProvinces] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
+  // Fetch provinces data
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      setIsLoadingProvinces(true);
+      try {
+        const response = await fetch('/data/data.json');
+        const data = await response.json();
+        setProvinces(data);
+      } catch (error) {
+        console.error('Error loading provinces:', error);
+      } finally {
+        setIsLoadingProvinces(false);
+      }
+    };
+
+    fetchProvinces();
+  }, []);
+
   const contactInfo: ContactInfo[] = [
     {
-      icon: "📍",
+      icon: faMapMarkerAlt,
       title: "Địa chỉ",
       value: "123 Đường ABC, Quận 1, TP.HCM, Việt Nam"
     },
     {
-      icon: "📞",
+      icon: faPhone,
       title: "Điện thoại",
       value: "+84 28 1234 5678",
       link: "tel:+842812345678"
     },
     {
-      icon: "📧",
+      icon: faEnvelope,
       title: "Email",
       value: "info@ikigaivilla.com",
       link: "mailto:info@ikigaivilla.com"
     },
     {
-      icon: "🕒",
+      icon: faClock,
       title: "Giờ làm việc",
       value: "24/7 - Hỗ trợ khách hàng"
     }
@@ -56,6 +96,21 @@ export default function Contact() {
       ...prev,
       [name]: value
     }));
+
+    // Update wards when province changes
+    if (name === 'province') {
+      const selectedProvince = provinces.find(p => p.province_code === value);
+      if (selectedProvince) {
+        setSelectedWards(selectedProvince.wards);
+      } else {
+        setSelectedWards([]);
+      }
+      // Reset ward when province changes
+      setFormData(prev => ({
+        ...prev,
+        ward: ""
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -74,6 +129,8 @@ export default function Contact() {
         name: "",
         email: "",
         phone: "",
+        province: "",
+        ward: "",
         subject: "",
         message: ""
       });
@@ -110,7 +167,7 @@ export default function Contact() {
 
       {/* Contact Information */}
       <section className="py-16 px-4">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1440px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
             {contactInfo.map((info, index) => (
               <div 
@@ -118,7 +175,9 @@ export default function Contact() {
                 className={`bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
-                <div className="text-4xl mb-4">{info.icon}</div>
+                <div className="text-4xl mb-4 text-[#d11e0f]">
+                  <FontAwesomeIcon icon={info.icon} />
+                </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">{info.title}</h3>
                 {info.link ? (
                   <a 
@@ -223,6 +282,50 @@ export default function Contact() {
                   </div>
                 </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="province" className="block text-sm font-semibold text-gray-700 mb-2">
+                      Tỉnh/Thành phố
+                    </label>
+                    <select
+                      id="province"
+                      name="province"
+                      value={formData.province}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d11e0f] focus:border-transparent bg-white"
+                      disabled={isLoadingProvinces}
+                    >
+                      <option value="">Chọn tỉnh/thành phố</option>
+                      {provinces.map((province) => (
+                        <option key={province.province_code} value={province.province_code}>
+                          {province.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="ward" className="block text-sm font-semibold text-gray-700 mb-2">
+                      Xã/Phường
+                    </label>
+                    <select
+                      id="ward"
+                      name="ward"
+                      value={formData.ward}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d11e0f] focus:border-transparent bg-white"
+                      disabled={!formData.province || selectedWards.length === 0}
+                    >
+                      <option value="">Chọn xã/phường</option>
+                      {selectedWards.map((ward) => (
+                        <option key={ward.ward_code} value={ward.ward_code}>
+                          {ward.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
                 <div>
                   <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">
                     Nội dung tin nhắn *
@@ -256,7 +359,9 @@ export default function Contact() {
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">Vị trí của chúng tôi</h3>
                 <div className="bg-gray-200 rounded-lg h-64 flex items-center justify-center">
                   <div className="text-center text-gray-600">
-                    <div className="text-4xl mb-2">🗺️</div>
+                    <div className="text-4xl mb-2 text-[#d11e0f]">
+                      <FontAwesomeIcon icon={faMapMarkerAlt} />
+                    </div>
                     <p>Bản đồ sẽ được tích hợp tại đây</p>
                     <p className="text-sm mt-2">123 Đường ABC, Quận 1, TP.HCM</p>
                   </div>
@@ -298,32 +403,20 @@ export default function Contact() {
           
           <div className="flex justify-center space-x-6 mb-8">
             <a href="#" className="bg-white/20 hover:bg-white/30 p-4 rounded-full transition-colors">
-              <span className="text-2xl">📘</span>
+              <FontAwesomeIcon icon={faFacebook} className="text-2xl" />
             </a>
             <a href="#" className="bg-white/20 hover:bg-white/30 p-4 rounded-full transition-colors">
-              <span className="text-2xl">📷</span>
+              <FontAwesomeIcon icon={faInstagram} className="text-2xl" />
             </a>
             <a href="#" className="bg-white/20 hover:bg-white/30 p-4 rounded-full transition-colors">
-              <span className="text-2xl">🐦</span>
+              <FontAwesomeIcon icon={faTwitter} className="text-2xl" />
             </a>
             <a href="#" className="bg-white/20 hover:bg-white/30 p-4 rounded-full transition-colors">
-              <span className="text-2xl">📺</span>
+              <FontAwesomeIcon icon={faYoutube} className="text-2xl" />
             </a>
           </div>
 
-          <div className="border-t border-white/20 pt-8">
-            <h3 className="text-2xl font-bold mb-4">Đăng ký nhận tin tức</h3>
-            <div className="flex flex-col md:flex-row gap-4 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Nhập email của bạn"
-                className="flex-1 px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-white"
-              />
-              <button className="px-8 py-3 bg-white text-[#d11e0f] font-semibold rounded-lg hover:bg-gray-100 transition-colors">
-                Đăng ký
-              </button>
-            </div>
-          </div>
+       
         </div>
       </section>
     </div>

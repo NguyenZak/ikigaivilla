@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 
 interface ServiceItem {
-  id: number;
+  id: string;
   name: string;
   title: string;
   description: string;
@@ -19,10 +19,9 @@ export default function ServicesSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    setIsVisible(true);
-    
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
@@ -33,9 +32,35 @@ export default function ServicesSlider() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Intersection Observer cho animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    );
+
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
   const servicesData: ServiceItem[] = [
     {
-      id: 1,
+      id: "onsen",
       name: "Khu Onsen Ngoài Trời",
       title: "Khu Onsen Ngoài Trời",
       description: "Trải nghiệm tắm khoáng nóng ngoài trời chuẩn Nhật Bản, thư giãn giữa thiên nhiên, giúp phục hồi năng lượng và cân bằng cơ thể.",
@@ -49,7 +74,7 @@ export default function ServicesSlider() {
       ]
     },
     {
-      id: 2,
+      id: "lobby-library",
       name: "Sảnh Lễ Tân & Thư Viện",
       title: "Sảnh Lễ Tân & Thư Viện",
       description: "Không gian đón tiếp sang trọng, kết hợp thư viện yên tĩnh với hàng ngàn đầu sách, lý tưởng cho việc đọc sách, làm việc và thư giãn.",
@@ -63,7 +88,7 @@ export default function ServicesSlider() {
       ]
     },
     {
-      id: 3,
+      id: "restaurant",
       name: "Khu Vực Nhà Hàng",
       title: "Khu Vực Nhà Hàng",
       description: "Nhà hàng phục vụ ẩm thực đa dạng, không gian ấm cúng, thực đơn phong phú từ món Việt đến món Âu, nguyên liệu tươi ngon mỗi ngày.",
@@ -77,7 +102,7 @@ export default function ServicesSlider() {
       ]
     },
     {
-      id: 4,
+      id: "wellness",
       name: "Chăm Sóc Sức Khoẻ & Vật Lý Trị Liệu",
       title: "Chăm Sóc Sức Khoẻ & Vật Lý Trị Liệu",
       description: "Dịch vụ chăm sóc sức khoẻ toàn diện: massage, vật lý trị liệu, yoga, thiền, giúp phục hồi thể chất và tinh thần.",
@@ -119,10 +144,12 @@ export default function ServicesSlider() {
   };
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-white to-[#f8f7f2]">
+    <section ref={sectionRef} className="py-20 px-4 bg-gradient-to-b from-white to-[#f8f7f2]">
       <div className="max-w-[1440px] mx-auto">
         {/* Section Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`text-center mb-16 transition-all duration-1000 ease-out transform ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
             Tiện Ích Đặc Quyền
           </h2>
@@ -132,7 +159,9 @@ export default function ServicesSlider() {
         </div>
 
         {/* Services Slider */}
-        <div className="relative">
+        <div className={`relative transition-all duration-1000 ease-out delay-300 transform ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
@@ -154,10 +183,10 @@ export default function ServicesSlider() {
             {getVisibleServices().map((service, index) => (
               <article 
                 key={service.id} 
-                className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-500 hover:-translate-y-2 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-800 ease-out transform hover:-translate-y-2 ${
+                  isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
                 }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                style={{ transitionDelay: `${0.5 + index * 0.2}s` }}
               >
                 <div className="relative h-48">
                   <Image
@@ -173,7 +202,10 @@ export default function ServicesSlider() {
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-lg font-bold text-gray-800 mb-3 line-clamp-2">
+                  <h3 
+                    className="text-lg font-bold text-gray-800 mb-3 line-clamp-2 cursor-pointer hover:text-[#d11e0f] transition-colors"
+                    onClick={() => router.push(`/services?zone=${service.id}`)}
+                  >
                     {service.title}
                   </h3>
                   <p className="text-gray-600 text-sm line-clamp-3 mb-4">
@@ -198,8 +230,8 @@ export default function ServicesSlider() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Miễn phí</span>
                     <button 
-                      onClick={() => router.push('/services')}
-                      className="text-[#d11e0f] font-semibold hover:underline text-sm"
+                      onClick={() => router.push(`/services?zone=${service.id}`)}
+                      className="text-[#d11e0f] font-semibold hover:underline text-sm cursor-pointer"
                     >
                       Xem chi tiết →
                     </button>
@@ -211,7 +243,9 @@ export default function ServicesSlider() {
         </div>
 
         {/* View All Button */}
-        <div className="text-center mt-12">
+        <div className={`text-center mt-12 transition-all duration-800 ease-out transform ${
+          isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+        }`} style={{ transitionDelay: '1.3s' }}>
           <button 
             onClick={() => router.push('/services')}
             className="bg-[#d11e0f] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#b01a0d] transition-colors duration-300 hover:scale-105"

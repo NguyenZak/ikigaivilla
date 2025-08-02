@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
+import { useSearchParams } from "next/navigation";
 import CTASection from "./CTASection";
 
 interface RoomZone {
@@ -21,7 +22,20 @@ interface RoomZone {
 }
 
 export default function Rooms() {
+  const searchParams = useSearchParams();
   const [activeZone, setActiveZone] = useState("hoa-hong");
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  useEffect(() => {
+    const zone = searchParams.get('zone');
+    if (zone) {
+      setActiveZone(zone);
+    }
+  }, [searchParams]);
 
   const roomZones: RoomZone[] = [
     {
@@ -164,18 +178,20 @@ export default function Rooms() {
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">Các Hạng Phòng</h1>
-          <p className="text-lg md:text-xl lg:text-2xl mb-8 text-gray-200 leading-relaxed">
+          <h1 className={`text-4xl md:text-6xl lg:text-7xl font-bold mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            Các Hạng Phòng
+          </h1>
+          <p className={`text-lg md:text-xl lg:text-2xl mb-8 text-gray-200 leading-relaxed transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             Khám phá các hạng phòng đẳng cấp tại Ikigai Villa
           </p>
         </div>
       </section>
 
       {/* Zone Navigation */}
-      <section className="py-8 px-4 bg-white">
+      <section className={`py-8 px-4 bg-white transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-wrap justify-center gap-4">
-            {roomZones.map((zone) => (
+            {roomZones.map((zone, index) => (
               <button
                 key={zone.id}
                 onClick={() => setActiveZone(zone.id)}
@@ -184,6 +200,7 @@ export default function Rooms() {
                     ? 'bg-gradient-to-r from-[#d11e0f] to-[#b01a0d] text-white shadow-lg'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
                 {zone.name}
               </button>
@@ -194,8 +211,8 @@ export default function Rooms() {
 
       {/* Active Zone Details - Pinterest Style */}
       {currentZone && (
-        <section className="py-12 px-4">
-          <div className="max-w-7xl mx-auto">
+        <section className={`py-12 px-4 transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="max-w-[1440px] mx-auto">
             <div className="grid lg:grid-cols-4 gap-8">
               {/* Images Section - 3/4 width */}
               <div className="lg:col-span-3">

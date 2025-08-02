@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 
 interface RoomItem {
-  id: number;
+  id: string;
   name: string;
   title: string;
   description: string;
@@ -23,10 +23,9 @@ export default function RoomsSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    setIsVisible(true);
-    
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
@@ -37,9 +36,35 @@ export default function RoomsSlider() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Intersection Observer cho animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    );
+
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
   const roomsData: RoomItem[] = [
     {
-      id: 1,
+      id: "hoa-hong",
       name: "IKIGAI HOA HỒNG",
       title: "IKIGAI HOA HỒNG",
       description: "1 giường (Double twin) 1 phòng duy nhất (phòng ngủ, wc, bàn trà, sofa tiếp khách....)",
@@ -52,7 +77,7 @@ export default function RoomsSlider() {
       view: "Vườn Nhật"
     },
     {
-      id: 2,
+      id: "hoa-dao",
       name: "IKIGAI HOA ĐÀO (PHÒNG C)",
       title: "IKIGAI HOA ĐÀO (PHÒNG C)",
       description: "Phòng nghỉ ấm cúng với WC chung, phù hợp cho du khách muốn trải nghiệm không gian cộng đồng.",
@@ -65,7 +90,7 @@ export default function RoomsSlider() {
       view: "Vườn Nhật"
     },
     {
-      id: 3,
+      id: "hoa-mai",
       name: "IKIGAI HOA MAI (PHÒNG A,B)",
       title: "IKIGAI HOA MAI (PHÒNG A,B)",
       description: "Phòng rộng rãi với 2 giường, thiết kế hiện đại, view hướng núi tuyệt đẹp.",
@@ -78,7 +103,7 @@ export default function RoomsSlider() {
       view: "Núi"
     },
     {
-      id: 4,
+      id: "huong-duong",
       name: "IKIGAI HƯỚNG DƯƠNG (PHÒNG C)",
       title: "IKIGAI HƯỚNG DƯƠNG (PHÒNG C)",
       description: "Phòng lớn với 3 giường, không gian lý tưởng cho nhóm bạn hoặc gia đình.",
@@ -91,7 +116,7 @@ export default function RoomsSlider() {
       view: "Vườn Nhật"
     },
     {
-      id: 5,
+      id: "hoa-phuong",
       name: "IKIGAI HOA PHƯỢNG (PHÒNG A,D)",
       title: "IKIGAI HOA PHƯỢNG (PHÒNG A,D)",
       description: "Phòng lớn nhất với 4 giường, không gian lý tưởng cho nhóm lớn hoặc sự kiện.",
@@ -130,10 +155,12 @@ export default function RoomsSlider() {
   };
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-[#f8f7f2] to-white">
+    <section ref={sectionRef} className="py-20 px-4 bg-gradient-to-b from-[#f8f7f2] to-white">
       <div className="max-w-[1440px] mx-auto">
         {/* Section Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`text-center mb-16 transition-all duration-1000 ease-out transform ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
             Khám Phá Các Hạng Phòng
           </h2>
@@ -143,7 +170,9 @@ export default function RoomsSlider() {
         </div>
 
         {/* Rooms Slider */}
-        <div className="relative">
+        <div className={`relative transition-all duration-1000 ease-out delay-300 transform ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
@@ -165,10 +194,10 @@ export default function RoomsSlider() {
             {getVisibleRooms().map((room, index) => (
               <article 
                 key={room.id} 
-                className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-500 hover:-translate-y-2 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-800 ease-out transform hover:-translate-y-2 ${
+                  isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
                 }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                style={{ transitionDelay: `${0.5 + index * 0.2}s` }}
               >
                 <div className="relative h-48">
                   <Image
@@ -184,7 +213,10 @@ export default function RoomsSlider() {
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-lg font-bold text-gray-800 mb-3 line-clamp-2">
+                  <h3 
+                    className="text-lg font-bold text-gray-800 mb-3 line-clamp-2 cursor-pointer hover:text-[#d11e0f] transition-colors"
+                    onClick={() => router.push(`/rooms?zone=${room.id}`)}
+                  >
                     {room.title}
                   </h3>
                   <p className="text-gray-600 text-sm line-clamp-3 mb-4">
@@ -214,8 +246,8 @@ export default function RoomsSlider() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">{room.price}</span>
                     <button 
-                      onClick={() => router.push('/rooms')}
-                      className="text-[#d11e0f] font-semibold hover:underline text-sm"
+                      onClick={() => router.push(`/rooms?zone=${room.id}`)}
+                      className="text-[#d11e0f] font-semibold hover:underline text-sm cursor-pointer"
                     >
                       Xem chi tiết →
                     </button>
@@ -227,7 +259,9 @@ export default function RoomsSlider() {
         </div>
 
         {/* View All Button */}
-        <div className="text-center mt-12">
+        <div className={`text-center mt-12 transition-all duration-800 ease-out transform ${
+          isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+        }`} style={{ transitionDelay: '1.3s' }}>
           <button 
             onClick={() => router.push('/rooms')}
             className="bg-[#d11e0f] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#b01a0d] transition-colors duration-300 hover:scale-105"

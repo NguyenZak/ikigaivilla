@@ -2,6 +2,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faTrophy, faHandshake, faLeaf, faGem, faUsers, faStar, faAward, faHeart, faCog } from '@fortawesome/free-solid-svg-icons';
 import LetterCard from "./LetterCard";
 import CTASection from "./CTASection";
 
@@ -13,7 +16,7 @@ interface TeamMember {
 }
 
 interface Value {
-  icon: string;
+  icon: IconProp;
   title: string;
   description: string;
 }
@@ -54,22 +57,22 @@ export default function AboutUs() {
 
   const values: Value[] = [
     {
-      icon: "🏆",
+      icon: faTrophy,
       title: "Chất lượng xuất sắc",
       description: "Cam kết mang đến trải nghiệm đẳng cấp nhất cho mọi khách hàng."
     },
     {
-      icon: "🤝",
+      icon: faHandshake,
       title: "Dịch vụ tận tâm",
       description: "Đội ngũ chuyên nghiệp luôn sẵn sàng phục vụ 24/7."
     },
     {
-      icon: "🌿",
+      icon: faLeaf,
       title: "Bền vững môi trường",
       description: "Kiến trúc hài hòa với thiên nhiên, bảo vệ môi trường."
     },
     {
-      icon: "💎",
+      icon: faGem,
       title: "Độc đáo & Sáng tạo",
       description: "Mỗi thiết kế đều mang dấu ấn riêng biệt và độc đáo."
     }
@@ -146,14 +149,16 @@ export default function AboutUs() {
               <div className="flex gap-4 pt-4">
                 <Link
                   href="/services"
-                  className="bg-gradient-to-r from-[#d11e0f] to-[#b01a0d] hover:from-[#b01a0d] hover:to-[#8f150a] text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+                  className="bg-gradient-to-r from-[#d11e0f] to-[#b01a0d] hover:from-[#b01a0d] hover:to-[#8f150a] text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 flex items-center"
                 >
+                  <FontAwesomeIcon icon={faCog} className="w-4 h-4 mr-2" />
                   Khám phá dịch vụ
                 </Link>
                 <Link
                   href="/contact"
-                  className="border-2 border-[#d11e0f] text-[#d11e0f] hover:bg-[#d11e0f] hover:text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300"
+                  className="border-2 border-[#d11e0f] text-[#d11e0f] hover:bg-[#d11e0f] hover:text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center"
                 >
+                  <FontAwesomeIcon icon={faHandshake} className="w-4 h-4 mr-2" />
                   Liên hệ tư vấn
                 </Link>
               </div>
@@ -204,8 +209,8 @@ export default function AboutUs() {
                 key={index}
                 className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 text-center group"
               >
-                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {value.icon}
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300 text-[#d11e0f]">
+                  <FontAwesomeIcon icon={value.icon} />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-4">
                   {value.title}
@@ -237,7 +242,8 @@ export default function AboutUs() {
                 key={index}
                 className="text-center text-white"
               >
-                <div className="text-4xl md:text-5xl font-bold mb-2">
+                <div className="text-4xl md:text-5xl font-bold mb-2 flex items-center justify-center">
+                  <FontAwesomeIcon icon={index === 0 ? faHeart : index === 1 ? faStar : index === 2 ? faAward : faUsers} className="w-8 h-8 mr-3 text-yellow-300" />
                   {stat.value}
                 </div>
                 <div className="text-lg text-gray-200">

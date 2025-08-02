@@ -6,7 +6,8 @@ import { useState } from "react";
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import "react-photo-view/dist/react-photo-view.css";
 import ContactModal from "../../../components/ContactModal";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarkerAlt, faPhone, faEnvelope, faClock } from '@fortawesome/free-solid-svg-icons';
 interface PackageDetails {
   id: string;
   name: string;
@@ -574,9 +575,9 @@ export default function PackageDetailPage() {
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <h4 className="font-semibold text-gray-800 mb-3">Liên hệ:</h4>
                   <div className="space-y-2 text-sm text-gray-600">
-                    <div>📞 0123 456 789</div>
-                    <div>📧 info@ikigaivilla.com</div>
-                    <div>📍 Đà Nẵng, Việt Nam</div>
+                    <div><FontAwesomeIcon icon={faPhone} /> 0123 456 789</div>
+                    <div><FontAwesomeIcon icon={faEnvelope} /> info@ikigaivilla.com</div>
+                    <div><FontAwesomeIcon icon={faMapMarkerAlt} /> Đà Nẵng, Việt Nam</div>
                   </div>
                 </div>
               </div>

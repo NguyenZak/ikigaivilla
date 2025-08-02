@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 
@@ -19,10 +19,9 @@ export default function NewsSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    setIsVisible(true);
-    
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
@@ -31,6 +30,32 @@ export default function NewsSlider() {
     window.addEventListener('resize', handleResize);
     
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Intersection Observer cho animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    );
+
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
   }, []);
 
   const newsData: NewsItem[] = [
@@ -115,10 +140,12 @@ export default function NewsSlider() {
   };
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-white to-[#f8f7f2]">
+    <section ref={sectionRef} className="py-20 px-4 bg-gradient-to-b from-white to-[#f8f7f2]">
       <div className="max-w-[1440px] mx-auto">
         {/* Section Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`text-center mb-16 transition-all duration-1000 ease-out transform ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
             Tin Tức & Sự Kiện
           </h2>
@@ -128,7 +155,9 @@ export default function NewsSlider() {
         </div>
 
         {/* News Slider */}
-        <div className="relative">
+        <div className={`relative transition-all duration-1000 ease-out delay-300 transform ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
@@ -150,10 +179,10 @@ export default function NewsSlider() {
             {getVisibleNews().map((news, index) => (
               <article 
                 key={news.id} 
-                className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-500 hover:-translate-y-2 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-800 ease-out transform hover:-translate-y-2 ${
+                  isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
                 }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                style={{ transitionDelay: `${0.5 + index * 0.2}s` }}
               >
                 <div className="relative h-48">
                   <Image
@@ -173,28 +202,33 @@ export default function NewsSlider() {
                     <span>{news.date}</span>
                     <span>{news.readTime}</span>
                   </div>
-                  <h3 className="text-lg font-bold text-gray-800 mb-3 line-clamp-2">
+                  <h3 
+                    className="text-lg font-bold text-gray-800 mb-3 line-clamp-2 cursor-pointer hover:text-[#d11e0f] transition-colors"
+                    onClick={() => router.push(`/news/${news.id}`)}
+                  >
                     {news.title}
                   </h3>
                   <p className="text-gray-600 mb-4 line-clamp-3 text-sm">
                     {news.excerpt}
                   </p>
-                  <button 
-                    onClick={() => router.push(`/news/${news.id}`)}
-                    className="text-[#d11e0f] font-semibold hover:underline text-sm"
-                  >
-                    Đọc thêm →
-                  </button>
+                  <div className="text-right">
+                    <button 
+                      onClick={() => router.push(`/news/${news.id}`)}
+                      className="text-[#d11e0f] font-semibold hover:underline text-sm cursor-pointer"
+                    >
+                      Đọc thêm →
+                    </button>
+                  </div>
                 </div>
               </article>
             ))}
           </div>
-
-
         </div>
 
         {/* View All Button */}
-        <div className="text-center mt-12">
+        <div className={`text-center mt-12 transition-all duration-800 ease-out transform ${
+          isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+        }`} style={{ transitionDelay: '1.3s' }}>
           <button 
             onClick={() => router.push('/news')}
             className="bg-[#d11e0f] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#b01a0d] transition-colors duration-300 hover:scale-105"

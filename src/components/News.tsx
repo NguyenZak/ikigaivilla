@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import CTASection from "./CTASection";
 
 interface NewsItem {
   id: number;
@@ -239,27 +240,7 @@ export default function News() {
         </div>
       </section>
 
-      {/* Newsletter Subscription */}
-      <section className="py-16 px-4 bg-[#d11e0f]">
-        <div className="max-w-4xl mx-auto text-center text-white">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Đăng ký nhận tin tức
-          </h2>
-          <p className="text-xl mb-8">
-            Nhận những tin tức mới nhất về Ikigai Villa qua email
-          </p>
-          <div className="flex flex-col md:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Nhập email của bạn"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-white"
-            />
-            <button className="px-8 py-3 bg-white text-[#d11e0f] font-semibold rounded-lg hover:bg-gray-100 transition-colors">
-              Đăng ký
-            </button>
-          </div>
-        </div>
-      </section>
+          <CTASection />
     </div>
   );
 } 

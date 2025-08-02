@@ -3,12 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Pagination, Keyboard, EffectFade } from 'swiper/modules';
+import { Autoplay, Navigation, Pagination, Keyboard } from 'swiper/modules';
 import ContactModal from './ContactModal';
 
 // Import Swiper styles
 import 'swiper/css';
-import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
@@ -30,20 +29,26 @@ interface HeroSliderProps {
 }
 
 export default function HeroSlider({ slides }: HeroSliderProps) {
-  const [isAnimating, setIsAnimating] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleSlideChange = () => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 1000);
+  };
+
+  const handleTransitionEnd = () => {
+    setIsAnimating(false);
+  };
 
   return (
     <>
       <section className="relative h-screen overflow-hidden">
         <Swiper
-          modules={[Autoplay, Navigation, Pagination, Keyboard, EffectFade]}
-          effect="fade"
+          modules={[Autoplay, Navigation, Pagination, Keyboard]}
           loop={true}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-          }}
           keyboard={{
             enabled: true,
             onlyInViewport: true,
@@ -56,9 +61,10 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
             clickable: true,
             el: '.swiper-pagination',
           }}
-          onSlideChange={() => setIsAnimating(true)}
-          onTransitionEnd={() => setIsAnimating(false)}
+          speed={1000}
           className="h-full"
+          onSlideChange={handleSlideChange}
+          onTransitionEnd={handleTransitionEnd}
         >
           {slides.map((slide, index) => (
             <SwiperSlide key={index} className="relative">
@@ -92,17 +98,23 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
                 <div className="max-w-[1440px] mx-auto px-4 md:px-8 w-full pb-16 md:pb-16">
                   <div className="max-w-2xl">
                     {/* Main Heading */}
-                    <h1 className="text-2xl sm:text-xl md:text-xl lg:text-5xl font-bold mb-3 md:mb-6 leading-tight text-white">
+                    <h1 className={`text-2xl sm:text-xl md:text-xl lg:text-5xl font-bold mb-3 md:mb-6 leading-tight text-white transition-all duration-1000 ease-out transform ${
+                      isAnimating ? 'scale-105' : 'scale-100'
+                    }`}>
                       {slide.title}
                     </h1>
                     
                     {/* Descriptive Paragraph */}
-                    <p className="text-sm sm:text-base md:text-xl lg:text-xl mb-4 md:mb-8 text-gray-200 leading-relaxed">
+                    <p className={`text-sm sm:text-base md:text-xl lg:text-xl mb-4 md:mb-8 text-gray-200 leading-relaxed transition-all duration-1000 ease-out delay-300 transform ${
+                      isAnimating ? 'scale-105' : 'scale-100'
+                    }`}>
                       {slide.subtitle}
                     </p>
 
                     {/* Call to Action Buttons */}
-                    <div className="flex flex-row gap-2 md:gap-4 mb-6 md:mb-12">
+                    <div className={`flex flex-row gap-2 md:gap-4 mb-6 md:mb-12 transition-all duration-1000 ease-out delay-600 transform ${
+                      isAnimating ? 'scale-105' : 'scale-100'
+                    }`}>
                       <button
                         onClick={() => setIsContactModalOpen(true)}
                         className="bg-gradient-to-r from-[#d11e0f] to-[#b01a0d] hover:from-[#b01a0d] hover:to-[#8f150a] text-white px-3 md:px-8 py-2 md:py-4 rounded-lg font-semibold text-xs md:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex-1"
@@ -118,7 +130,9 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
                     </div>
 
                     {/* Statistics Section */}
-                    <div className="flex flex-row gap-2 md:gap-8">
+                    <div className={`flex flex-row gap-2 md:gap-8 transition-all duration-1000 ease-out delay-900 transform ${
+                      isAnimating ? 'scale-105' : 'scale-100'
+                    }`}>
                       {(slide.statistics || []).map((stat, statIndex) => (
                         <div key={statIndex} className="text-center flex-1">
                           <div className="text-lg md:text-4xl font-bold mb-1 md:mb-2 text-white">
@@ -138,7 +152,7 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
         </Swiper>
 
         {/* Custom Navigation Buttons */}
-        <button className="swiper-button-prev absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 backdrop-blur-sm hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group z-20">
+        <button className="swiper-button-prev absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-all duration-300 backdrop-blur-sm hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group z-50 border-2 border-white shadow-lg min-w-[56px] min-h-[56px] flex items-center justify-center">
           <svg
             className="w-6 h-6 transition-transform duration-300 group-hover:-translate-x-1"
             fill="none"
@@ -148,7 +162,7 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <button className="swiper-button-next absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 backdrop-blur-sm hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group z-20">
+        <button className="swiper-button-next absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-all duration-300 backdrop-blur-sm hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group z-50 border-2 border-white shadow-lg min-w-[56px] min-h-[56px] flex items-center justify-center">
           <svg
             className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1"
             fill="none"

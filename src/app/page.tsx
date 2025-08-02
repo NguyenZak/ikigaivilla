@@ -6,6 +6,7 @@ import OurTeam from "../components/OurTeam";
 import NewsSlider from "../components/NewsSlider";
 import RoomsSlider from "../components/RoomsSlider";
 import ServicesSlider from "../components/ServicesSlider";
+import CTASection from "../components/CTASection";
 import Link from "next/link";
 
 export default function Home() {
@@ -16,7 +17,7 @@ export default function Home() {
       alt: "Ikigaivilla Onsen",
       title: "Chào mừng đến với Ikigaivilla",
       subtitle: "Trải nghiệm nghỉ dưỡng sang trọng với dịch vụ đẳng cấp 5 sao",
-      overlay: "from-black/50 to-black/50",
+      overlay: "from-black/30 to-black/30",
       statistics: [
         { value: "50+", label: "Phòng Nghỉ" },
         { value: "1000+", label: "Khách Hài Lòng" },
@@ -29,7 +30,7 @@ export default function Home() {
       alt: "Ikigaivilla Thư Viện",
       title: "Không gian thư viện yên tĩnh",
       subtitle: "Nơi lý tưởng để thư giãn và làm việc",
-      overlay: "from-black/50 to-black/50",
+      overlay: "from-black/30 to-black/30",
       statistics: [
         { value: "24/7", label: "Hỗ Trợ Khách Hàng" },
         { value: "100%", label: "An Toàn Tuyệt Đối" },
@@ -42,7 +43,7 @@ export default function Home() {
       alt: "Ikigaivilla Cổng Chính",
       title: "Cổng chính Ikigaivilla",
       subtitle: "Kiến trúc độc đáo, ấn tượng ngay từ cái nhìn đầu tiên",
-      overlay: "from-black/50 to-black/50",
+      overlay: "from-black/30 to-black/30",
       statistics: [
         { value: "2020", label: "Năm Thành Lập" },
         { value: "100+", label: "Nhân Viên Chuyên Nghiệp" },
@@ -55,7 +56,7 @@ export default function Home() {
       alt: "Ikigaivilla Cổng Phụ",
       title: "Cổng phụ tiện lợi",
       subtitle: "Thuận tiện di chuyển, an toàn tuyệt đối",
-      overlay: "from-black/50 to-black/50",
+      overlay: "from-black/30 to-black/30",
       statistics: [
         { value: "3", label: "Cổng Ra Vào" },
         { value: "24h", label: "Bảo Vệ" },
@@ -68,7 +69,7 @@ export default function Home() {
       alt: "Ikigaivilla PCTT",
       title: "Phòng chức năng đa dạng",
       subtitle: "Đáp ứng mọi nhu cầu của khách hàng",
-      overlay: "from-black/50 to-black/50",
+      overlay: "from-black/30 to-black/30",
       statistics: [
         { value: "10+", label: "Loại Phòng Chức Năng" },
         { value: "200+", label: "Tiện Ích Đặc Biệt" },
@@ -78,7 +79,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen  bg-[#f8f7f2]">
+    <div className="min-h-screen bg-[#f8f7f2]">
       {/* Hero Banner Slider */}
       <HeroSlider slides={slides} />
 
@@ -100,7 +101,8 @@ export default function Home() {
       {/* Rooms Slider */}
       <RoomsSlider />
 
-      
+      {/* CTA Section */}
+      <CTASection />
     </div>
   );
 }
